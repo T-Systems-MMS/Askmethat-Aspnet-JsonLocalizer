@@ -2,7 +2,7 @@
 Json Localizer library for .NetStandard and .NetCore Asp.net projects
 
 #### Nuget
-[NuGet](https://dev.azure.com/T-Systems-MMS/Askmethat.Aspnet.JsonLocalizer/_packaging?_a=package&feed=T-Systems-MMS&package=Askmethat.Aspnet.JsonLocalizer&protocolType=NuGet)
+[NuGet](https://dev.azure.com/T-Systems-MMS/Askmethat-Aspnet-JsonLocalizer/_packaging?_a=package&feed=T-Systems-MMS&package=Askmethat.Aspnet.JsonLocalizer&protocolType=NuGet)
 
 #### Build
 
@@ -10,14 +10,14 @@ Json Localizer library for .NetStandard and .NetCore Asp.net projects
 
 # Project
 
-This library allow user to use JSON files instead of RESX in Asp.net application.
-The code try to be most compliante with Microsoft guidelines.
-The library is compatible with NetStandard & NetCore
+This library allows users to use JSON files instead of RESX in an ASP.NET application.
+The code tries to be most compliant with Microsoft guidelines.
+The library is compatible with NetStandard & NetCore.
 
 # Configuration
 
 An extension method is available for `IServiceCollection`.
-You can have a look to this method [here](https://github.com/T-Systens-MMS/Askmethat-Aspnet-JsonLocalizer/blob/development/Askmethat.Aspnet.JsonLocalizer/Extensions/JsonLocalizerServiceExtension.cs)
+You can have a look at the method [here](https://github.com/T-Systens-MMS/Askmethat-Aspnet-JsonLocalizer/blob/development/Askmethat.Aspnet.JsonLocalizer/Extensions/JsonLocalizerServiceExtension.cs)
 
 ## Options 
 
@@ -76,14 +76,14 @@ Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringL
 
 **WithCulture method**
 
-**WhithCulture** method is not implemented and will be not implemented. ASP.NET Team, start to set this method **Obsolete** for version 3 and will be removed in version 4 of asp.net core.
+**WhithCulture** method is not implemented and will not be implemented. ASP.NET Team, start to set this method **Obsolete** for version 3 and will be removed in version 4 of asp.net core.
 
 For more information : 
 https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/46
 
 # Performances
 
-After talking with others Devs about my package, they ask my about performance.
+After talking with others Devs about my package, they asked me about performance.
 
 So I added a benchmark project and here the last results.
 
