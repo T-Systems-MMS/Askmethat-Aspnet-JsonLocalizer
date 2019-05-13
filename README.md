@@ -29,11 +29,11 @@ services.AddJsonLocalization(options => {
         options.CacheDuration = TimeSpan.FromMinutes(15);
         options.ResourcesPath = "mypath";
         options.FileEncoding = Encoding.GetEncoding("ISO-8859-1");
-        options.SupportedCultureInfos = new[]
+        options.SupportedCultureInfos = new HashSet<CultureInfo>(new[]
         {
           new CultureInfo("en-US"),
           new CultureInfo("fr-FR")
-        };
+        });
     });
 ```
 
