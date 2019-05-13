@@ -20,6 +20,7 @@ steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
 - task: DotNetCoreCLI@2
+  displayName: 'Run tests'
   inputs:
     command: 'test'
     projects: 'tests/**/*.csproj'
@@ -42,6 +43,7 @@ steps:
     packagesToPack: '**/*.csproj'
     arguments: '--configuration $(buildConfiguration) --output $(build.artifactStagingDirectory)/prod'
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish build artifacts'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: '$(ArtifactName)'
