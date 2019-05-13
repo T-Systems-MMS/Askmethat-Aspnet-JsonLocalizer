@@ -14,21 +14,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.0'">
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" />
-
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" />
-
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.2'">
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.All" />
-
+  <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.All" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj" />
