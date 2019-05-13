@@ -1,10 +1,7 @@
 ﻿using Askmethat.Aspnet.JsonLocalizer.Localizer;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Extensions
 {

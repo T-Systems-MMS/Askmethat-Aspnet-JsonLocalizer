@@ -10,7 +10,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
     [TestClass]
     public class StringFactoryCreateJsonFileTest
     {
-        JsonStringLocalizer localizer = null;
+        private JsonStringLocalizer localizer = null;
         public void InitLocalizer(CultureInfo cultureInfo, string baseName = null)
         {
             CultureInfo.CurrentUICulture = cultureInfo;

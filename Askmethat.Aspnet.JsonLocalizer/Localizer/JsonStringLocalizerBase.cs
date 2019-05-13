@@ -30,8 +30,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             _memCacheDuration = _localizationOptions.Value.CacheDuration;
         }
 
-        string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.DisplayName}";
-        void SetCurrentCultureToCache(CultureInfo ci) => currentCulture = ci.Name;
+        private string GetCacheKey(CultureInfo ci) => $"{CACHE_KEY}_{ci.DisplayName}";
+        private void SetCurrentCultureToCache(CultureInfo ci) => currentCulture = ci.Name;
         protected bool IsUICultureCurrentCulture(CultureInfo ci) {
             return string.Equals(currentCulture, ci.Name, StringComparison.InvariantCultureIgnoreCase);
         }
@@ -95,7 +95,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// Construct localization object from json files
         /// </summary>
         /// <param name="jsonPath">Json file path</param>
-        void ConstructLocalizationObject(string jsonPath, CultureInfo currentCulture)
+        private void ConstructLocalizationObject(string jsonPath, CultureInfo currentCulture)
         {
             //be sure that localization is always initialized
             if (localization == null)
@@ -152,13 +152,11 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             };
         }
 
-        string TransformBaseNameToPath(string baseName)
+        private string TransformBaseNameToPath(string baseName)
         {
             if (!string.IsNullOrEmpty(baseName))
             {
-                string friendlyName = string.Empty;
-
-                friendlyName = AppDomain.CurrentDomain.FriendlyName;
+                var friendlyName = AppDomain.CurrentDomain.FriendlyName;
 
                 //return baseName.Replace($"{friendlyName}.", "").Replace(".", "/");
                 return baseName.Replace($"{friendlyName}.", "").Replace(".", Path.DirectorySeparatorChar.ToString());

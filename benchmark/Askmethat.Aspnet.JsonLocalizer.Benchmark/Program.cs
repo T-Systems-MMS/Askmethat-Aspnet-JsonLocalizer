@@ -6,15 +6,11 @@ using Askmethat.Aspnet.JsonLocalizer.Benchmark.Helpers;
 using Microsoft.Extensions.Localization;
 using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using System.Globalization;
-using System.Text;
 using Microsoft.Extensions.Options;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using Microsoft.Extensions.DependencyInjection;
 using Askmethat.Aspnet.JsonLocalizer.Benchmark.Resources;
-using System.Reflection;
 using Microsoft.Extensions.FileProviders;
-using System.Threading;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
 {
@@ -35,12 +31,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
     [MinColumn, MaxColumn, MemoryDiagnoser, MarkdownExporter]
     public class BenchmarkJSONLocalizer
     {
-        IHostingEnvironment env = new HostingEnvironment();
-        IMemoryCache _cach = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() {}));
-        IMemoryCache _cach2 = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() { }));
-
-        private const int N = 10000;
-        IStringLocalizer _jsonLocalizer;
+        private readonly IMemoryCache _cach = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() {}));
+        private readonly IMemoryCache _cach2 = new MemoryCache(Options.Create<MemoryCacheOptions>(new MemoryCacheOptions() { }));
+        private readonly IStringLocalizer _jsonLocalizer;
 
         public BenchmarkJSONLocalizer()
         {
@@ -109,9 +102,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Benchmark
 
     }
 
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             BenchmarkRunner.Run<BenchmarkJSONLocalizer>();
         }

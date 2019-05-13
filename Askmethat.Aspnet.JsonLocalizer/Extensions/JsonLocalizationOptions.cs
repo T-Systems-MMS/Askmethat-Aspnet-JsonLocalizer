@@ -3,17 +3,15 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 
 namespace Askmethat.Aspnet.JsonLocalizer.Extensions
 {
     public class JsonLocalizationOptions : LocalizationOptions
     {
-
-        const char PLURAL_SEPARATOR = '|';
-        const string DEFAULT_RESOURCES = "Resources";
-        const string DEFAULT_CULTURE = "en-US";
+        private const char PLURAL_SEPARATOR = '|';
+        private const string DEFAULT_RESOURCES = "Resources";
+        private const string DEFAULT_CULTURE = "en-US";
 
         public new string ResourcesPath { get; set; } = DEFAULT_RESOURCES;
         public TimeSpan CacheDuration { get; set; } = TimeSpan.FromMinutes(30);

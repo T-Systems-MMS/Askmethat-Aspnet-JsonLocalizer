@@ -1,10 +1,8 @@
 ﻿using Askmethat.Aspnet.JsonLocalizer.Extensions;
 using Askmethat.Aspnet.JsonLocalizer.Format;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,7 +13,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 {
     internal class JsonStringLocalizer : JsonStringLocalizerBase, IStringLocalizer
     {
-        readonly IHostingEnvironment _env;
+        private readonly IHostingEnvironment _env;
 
         public JsonStringLocalizer(IOptions<JsonLocalizationOptions> localizationOptions, IHostingEnvironment env, string baseName = null) : base(localizationOptions, baseName)
         {
@@ -49,10 +47,9 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         private string GetPluralLocalization(string name, string format, object[] arguments)
         {
             object last = arguments.LastOrDefault();
-            string value = string.Empty;
-            if (last != null && last is bool)
+            string value;
+            if (last != null && last is bool isPlural)
             {
-                bool isPlural = (bool)last;
                 value = GetString(name);
                 if (value.Contains(_localizationOptions.Value.PluralSeparator))
                 {
@@ -99,14 +96,13 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             return new JsonStringLocalizer(_localizationOptions, _env);
         }
 
-        string GetString(string name, bool shouldTryDefaultCulture = true)
+        private string GetString(string name, bool shouldTryDefaultCulture = true)
         {
             if (name == null)
             {
                 throw new ArgumentNullException(nameof(name));
             }
 
-            LocalizatedFormat localizedValue = null;
 
             if (shouldTryDefaultCulture && !IsUICultureCurrentCulture(CultureInfo.CurrentUICulture))
             {
@@ -115,7 +111,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 GetCultureToUse(CultureInfo.CurrentUICulture);
             }
 
-            if (localization != null && localization.TryGetValue(name, out localizedValue))
+            if (localization != null && localization.TryGetValue(name, out LocalizatedFormat localizedValue))
             {
                 return localizedValue.Value;
             }
@@ -136,7 +132,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         /// Get path of json
         /// </summary>
         /// <returns>JSON relative path</returns>
-        string GetJsonRelativePath(string path)
+        private string GetJsonRelativePath(string path)
         {
             string fullPath = string.Empty;
             if (this._localizationOptions.Value.IsAbsolutePath)
