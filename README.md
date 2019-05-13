@@ -2,11 +2,11 @@
 Json Localizer library for .NetStandard and .NetCore Asp.net projects
 
 #### Nuget
-[![NuGet](https://img.shields.io/nuget/dt/Askmethat.Aspnet.JsonLocalizer.svg)](https://www.nuget.org/packages/Askmethat.Aspnet.JsonLocalizer)
+(NuGet)(https://dev.azure.com/T-Systems-MMS/Askmethat.Aspnet.JsonLocalizer/_packaging?_a=package&feed=T-Systems-MMS&package=Askmethat.Aspnet.JsonLocalizer&protocolType=NuGet)
 
 #### Build
 
-[![Build status](https://ci.appveyor.com/api/projects/status/gt8vg0e2f9gapr2d/branch/master?svg=true)](https://ci.appveyor.com/project/AlexTeixeira/askmethat-aspnet-jsonlocalizer/branch/master)
+[![Build Status](https://dev.azure.com/T-Systems-MMS/Askmethat-Aspnet-JsonLocalizer/_apis/build/status/Askmethat-Aspnet-JsonLocalizer-CI?branchName=master)](https://dev.azure.com/T-Systems-MMS/Askmethat-Aspnet-JsonLocalizer/_build/latest?definitionId=3&branchName=master)
 
 # Project
 
@@ -17,39 +17,7 @@ The library is compatible with NetStandard & NetCore
 # Configuration
 
 An extension method is available for `IServiceCollection`.
-You can have a look to this method [here](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/development/Askmethat.Aspnet.JsonLocalizer/Extensions/JsonLocalizerServiceExtension.cs)
-
-# Breaking Changes
-
-For performance purpose, JSON structure was changes since 2.0.0 from List to Dictionnary.
-Here the detail for version before 1.1.7 and version after 2.0.0
-
-## 1.1.7-
-
-``` json
-[
-  {
-    "Key": "Name3",
-    "Values": {
-      "en-US": "My Name 3",
-      "fr-FR": "Mon Nom 3"
-    }
-  }
-]
-```
-
-## 2.0.0+
-
-``` json
-{
-  "Name3": {
-    "Values": {
-      "en-US": "My Name 3",
-      "fr-FR": "Mon Nom 3"
-    }
-  }
-}
-```
+You can have a look to this method [here](https://github.com/T-Systens-MMS/Askmethat-Aspnet-JsonLocalizer/blob/development/Askmethat.Aspnet.JsonLocalizer/Extensions/JsonLocalizerServiceExtension.cs)
 
 ## Options 
 
@@ -83,7 +51,7 @@ services.AddJsonLocalization(options => {
 #Pluralization
 
 In version 2.0.0, Pluralization was introduced.
-You are now able to manage a singular (left) and plural (rigth) version for the same Key. 
+You are now able to manage a singular (left) and plural (right) version for the same Key. 
 *PluralSeparator* is used as separator between the two strings.
 
 For example : User|Users for key Users
@@ -99,13 +67,6 @@ Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringL
 
 **Platform Support**
 
-## 1.1.7
-
-|Platform|Version|
-| -------------------  | :------------------: |
-|NetStandard|1.1.6+|
-|NetCore|2.0.0+|
-
 ## 2.0.0+
 
 |Platform|Version|
@@ -115,7 +76,7 @@ Pluralization is available with IStringLocalizer, IViewLocalizer and HtmlStringL
 
 **WithCulture method**
 
-**WhithCulture** method is not implemented and will be not implemented. ASP.NET Team, start to set this method **Obsolete** fr version 3 and will be removed in version 4 of asp.net core.
+**WhithCulture** method is not implemented and will be not implemented. ASP.NET Team, start to set this method **Obsolete** for version 3 and will be removed in version 4 of asp.net core.
 
 For more information : 
 https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/46
@@ -124,25 +85,7 @@ https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/46
 
 After talking with others Devs about my package, they ask my about performance.
 
-So I added a benchmark project and here the last results with some modification, that will be available with 1.1.7
-
-## 1.1.7
-
-``` ini
-
-BenchmarkDotNet=v0.11.3, OS=macOS Mojave 10.14 (18A391) [Darwin 18.0.0]
-Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cores
-.NET Core SDK=2.2.100
-  [Host]     : .NET Core 2.2.0 (CoreCLR 4.6.27110.04, CoreFX 4.6.27110.04), 64bit RyuJIT  [AttachedDebugger]
-  DefaultJob : .NET Core 2.2.0 (CoreCLR 4.6.27110.04, CoreFX 4.6.27110.04), 64bit RyuJIT
-
-
-```
-|        Method |     Mean |     Error |    StdDev |      Min |      Max | Ratio | Gen 0/1k Op | Gen 1/1k Op | Gen 2/1k Op | Allocated Memory/Op |
-|-------------- |---------:|----------:|----------:|---------:|---------:|------:|------------:|------------:|------------:|--------------------:|
-| JsonLocalizer | 255.1 ns | 0.7950 ns | 0.7048 ns | 253.3 ns | 256.4 ns |  2.18 |      0.0648 |           - |           - |               136 B |
-|     Localizer | 117.2 ns | 0.2544 ns | 0.2255 ns | 116.8 ns | 117.5 ns |  1.00 |           - |           - |           - |                   - |
-
+So I added a benchmark project and here the last results.
 
 ## 2.0.0+
 
@@ -169,7 +112,8 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
 # Contributors
 
 [@lethek](https://github.com/lethek) : PRs : [#20](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/20), [#17](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/17)
+[@Compufreak345](https://github.com/Compufreak345)
 
 # License
 
-[MIT Licence](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/blob/master/LICENSE)
+[MIT Licence](https://github.com/T-Systems-MMS/Askmethat-Aspnet-JsonLocalizer/blob/master/LICENSE)
