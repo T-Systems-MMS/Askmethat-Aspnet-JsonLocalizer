@@ -3,17 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>Askmethat.Aspnet.JsonLocalizer</PackageId>
-    <PackageVersion>$(Version)</PackageVersion>
     <Authors>TEIXEIRA Alexandre, Christoph Sonntag</Authors>
     <Description>Json Localizer library for .NetStandard and .NetCore Asp.net projects</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageReleaseNotes></PackageReleaseNotes>
     <PackageLicenseUrl>https://github.com/T-Systems-MMS/Askmethat-Aspnet-JsonLocalizer/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/T-Systems-MMS/Askmethat-Aspnet-JsonLocalizer</PackageProjectUrl>
-    <Copyright>Copyright 2018 (c) Askmethat Corporation.Copyright 2019 (c) T-Systems Multimedia Solutions GmbH</Copyright>
+    <Copyright>Copyright 2018 (c) Askmethat Corporation.Copyright, 2019 (c) T-Systems Multimedia Solutions GmbH</Copyright>
     <PackageTags>Json Localizer Globalization netcore netstandard</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.2.0</Version>
+    <Version>2.2.1</Version>
+    <Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
     <RepositoryUrl>https://github.com/T-Systems-MMS/Askmethat-Aspnet-JsonLocalizer</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
