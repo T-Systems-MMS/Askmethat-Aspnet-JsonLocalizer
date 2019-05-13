@@ -2,7 +2,7 @@
 Json Localizer library for .NetStandard and .NetCore Asp.net projects
 
 #### Nuget
-(NuGet)(https://dev.azure.com/T-Systems-MMS/Askmethat.Aspnet.JsonLocalizer/_packaging?_a=package&feed=T-Systems-MMS&package=Askmethat.Aspnet.JsonLocalizer&protocolType=NuGet)
+[NuGet](https://dev.azure.com/T-Systems-MMS/Askmethat.Aspnet.JsonLocalizer/_packaging?_a=package&feed=T-Systems-MMS&package=Askmethat.Aspnet.JsonLocalizer&protocolType=NuGet)
 
 #### Build
 
@@ -48,7 +48,7 @@ services.AddJsonLocalization(options => {
 - **Caching** : *_default value: MemoryCache*. Internal caching can be overwritted by using custom class that extends IMemoryCache.
 - **PluralSeparator** : *_default value: |*. Seperator used to get singular or pluralized version of localization. More information in *Pluralization*
 
-#Pluralization
+# Pluralization
 
 In version 2.0.0, Pluralization was introduced.
 You are now able to manage a singular (left) and plural (right) version for the same Key. 
@@ -112,6 +112,7 @@ Intel Core i7-5557U CPU 3.10GHz (Broadwell), 1 CPU, 4 logical and 2 physical cor
 # Contributors
 
 [@lethek](https://github.com/lethek) : PRs : [#20](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/20), [#17](https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/pull/17)
+
 [@Compufreak345](https://github.com/Compufreak345)
 
 # License
