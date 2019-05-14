@@ -25,7 +25,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
         {
             // As nested classes are represented by "+" instead of "." we replace those.
-            BaseName = baseName.Replace("+",".");
+            BaseName = baseName?.Replace("+",".");
             LocalizationOptions = localizationOptions;
             MemCache = LocalizationOptions.Value.Caching;
             MemCacheDuration = LocalizationOptions.Value.CacheDuration;
