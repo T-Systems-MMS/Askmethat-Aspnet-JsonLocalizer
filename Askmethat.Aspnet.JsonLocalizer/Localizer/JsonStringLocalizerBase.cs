@@ -24,7 +24,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         protected string CurrentCulture = string.Empty;
         public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
         {
-            BaseName = TransformBaseNameToPath(baseName);
+            // As nested classes are represented by "+" instead of "." we replace those.
+            BaseName = baseName.Replace("+",".");
             LocalizationOptions = localizationOptions;
             MemCache = LocalizationOptions.Value.Caching;
             MemCacheDuration = LocalizationOptions.Value.CacheDuration;
@@ -111,12 +112,8 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 Localization = new Dictionary<string, LocalizatedFormat>();
             }
-            var basePath = string.IsNullOrWhiteSpace(BaseName) ? jsonPath : Path.Combine(jsonPath, BaseName);
-            if (!Directory.Exists(basePath)) return;
-            string pattern = "*.json";
 
-            //get all files ending by json extension
-            string[] myFiles = Directory.GetFiles(basePath, pattern, SearchOption.AllDirectories);
+            var myFiles = GetMatchingJsonFiles(jsonPath);
 
             foreach (string file in myFiles)
             {
@@ -137,6 +134,66 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                     }
                 }
             }
+        }
+
+        private IEnumerable<string> GetMatchingJsonFiles(string jsonPath)
+        {
+            var searchPattern = "*.json";
+            var searchOption = SearchOption.AllDirectories;
+            var basePath = jsonPath;
+            if (LocalizationOptions.Value.UseBaseName && !string.IsNullOrWhiteSpace(BaseName))
+            {
+                /*
+                 https://docs.microsoft.com/de-de/aspnet/core/fundamentals/localization?view=aspnetcore-2.2#dataannotations-localization
+                    Using the option ResourcesPath = "Resources", the error messages in RegisterViewModel can be stored in either of the following paths:
+                    Resources/ViewModels.Account.RegisterViewModel.fr.resx
+                    Resources/ViewModels/Account/RegisterViewModel.fr.resx
+                 */
+
+                searchOption = SearchOption.TopDirectoryOnly;
+                var friendlyName = AppDomain.CurrentDomain.FriendlyName;
+
+                var shortName = BaseName.Replace($"{friendlyName}.", "");
+
+                basePath = Path.Combine(jsonPath, TransformNameToPath(shortName));
+                if (Directory.Exists(basePath))
+                {
+                    // We can search something like Resources/ViewModels/Account/RegisterViewModel/*.json
+                    searchPattern = "*.json";
+                }
+                else
+                {  // We search something like Resources/ViewModels/Account/RegisterViewModel.json
+                    var lastDot = shortName.LastIndexOf('.');
+                    var className = shortName.Substring(lastDot + 1);
+                    // Remove class name from shortName so we can use it as folder.
+                    var baseFolder = shortName.Substring(0, lastDot);
+                    baseFolder = TransformNameToPath(baseFolder);
+
+                    basePath = Path.Combine(jsonPath, baseFolder);
+
+                    if (Directory.Exists(basePath))
+                    {
+                        searchPattern = $"{className}?.json";
+                    }
+                    else
+                    { // We search something like Resources/ViewModels.Account.RegisterViewModel.json
+                        basePath = jsonPath;
+                        searchPattern = $"{shortName}?.json";
+                    }
+                }
+            }
+
+            // Get all files ending by json extension
+            return Directory.GetFiles(basePath, searchPattern, searchOption);
+        }
+
+        private string TransformNameToPath(string name)
+        {
+            if (!string.IsNullOrEmpty(name))
+            {
+                return name.Replace(".", Path.DirectorySeparatorChar.ToString());
+            }
+            return null;
         }
 
         private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
@@ -161,18 +218,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 IsParent = isParent,
                 Value = value
             };
-        }
-
-        private string TransformBaseNameToPath(string baseName)
-        {
-            if (!string.IsNullOrEmpty(baseName))
-            {
-                var friendlyName = AppDomain.CurrentDomain.FriendlyName;
-
-                //return baseName.Replace($"{friendlyName}.", "").Replace(".", "/");
-                return baseName.Replace($"{friendlyName}.", "").Replace(".", Path.DirectorySeparatorChar.ToString());
-            }
-            return null;
         }
 
 

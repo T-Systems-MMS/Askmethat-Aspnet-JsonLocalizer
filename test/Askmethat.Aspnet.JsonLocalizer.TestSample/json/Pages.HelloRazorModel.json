@@ -1,0 +1,8 @@
+{
+  "Hello": {
+    "Values": {
+      "en-US": "Hello from Razor page model",
+      "fr-FR": "Bonjour de rasoir page model ;)"
+    }
+  }
+}

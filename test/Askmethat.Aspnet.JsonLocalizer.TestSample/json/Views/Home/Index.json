@@ -11,19 +11,6 @@
       "fr-FR": "Utilisateur!|Utilisateurs!"
     }
   },
-  "fr-FR": {
-    "Values": {
-      "en-US": "French",
-      "fr-FR": "Français"
-    }
-  },
-  "en-US": {
-    "Values": {
-      "en-US": "English",
-      "fr-FR": "Anglais"
-    }
-
-  },
   "Language": {
     "Values": {
       "en-US": "Language: ",
@@ -35,6 +22,17 @@
       "en-US": "Save",
       "fr-FR": "Sauvegarder :"
     }
-
+  },
+  "fr-FR": {
+    "Values": {
+      "en-US": "French",
+      "fr-FR": "Français"
+    }
+  },
+  "en-US": {
+    "Values": {
+      "en-US": "English",
+      "fr-FR": "Anglais"
+    }
   }
 }

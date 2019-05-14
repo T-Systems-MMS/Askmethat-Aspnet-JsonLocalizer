@@ -25,7 +25,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         public IStringLocalizer Create(Type resourceSource)
         {
-            return (IStringLocalizer)new JsonStringLocalizer(_localizationOptions, _env);
+            return this.Create(resourceSource.FullName, string.Empty);
         }
 
         public IStringLocalizer Create(string baseName, string location)

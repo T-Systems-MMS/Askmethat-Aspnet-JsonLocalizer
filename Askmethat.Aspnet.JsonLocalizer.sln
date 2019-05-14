@@ -1,15 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Askmethat.Aspnet.JsonLocalizer", "Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj", "{0FB2924B-389A-40C3-81D9-8DC74A971E20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Askmethat.Aspnet.JsonLocalizer", "Askmethat.Aspnet.JsonLocalizer\Askmethat.Aspnet.JsonLocalizer.csproj", "{0FB2924B-389A-40C3-81D9-8DC74A971E20}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Askmethat.Aspnet.JsonLocalizer.Test", "test\Askmethat.Aspnet.JsonLocalizer.Test\Askmethat.Aspnet.JsonLocalizer.Test.csproj", "{592F2830-9D3D-4573-80B2-9AF9F7D4C7BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Askmethat.Aspnet.JsonLocalizer.TestSample", "test\Askmethat.Aspnet.JsonLocalizer.TestSample\Askmethat.Aspnet.JsonLocalizer.TestSample.csproj", "{E7F8CBFA-DAA7-4B82-810E-BA3CB24C11D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Askmethat.Aspnet.JsonLocalizer.TestSample", "test\Askmethat.Aspnet.JsonLocalizer.TestSample\Askmethat.Aspnet.JsonLocalizer.TestSample.csproj", "{E7F8CBFA-DAA7-4B82-810E-BA3CB24C11D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Askmethat.Aspnet.JsonLocalizer.Benchmark", "benchmark\Askmethat.Aspnet.JsonLocalizer.Benchmark\Askmethat.Aspnet.JsonLocalizer.Benchmark.csproj", "{A31FF43B-9A52-44A1-B7D2-469347B9EF46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Askmethat.Aspnet.JsonLocalizer.Benchmark", "benchmark\Askmethat.Aspnet.JsonLocalizer.Benchmark\Askmethat.Aspnet.JsonLocalizer.Benchmark.csproj", "{A31FF43B-9A52-44A1-B7D2-469347B9EF46}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{04254B47-0EFD-45D3-935A-775044D1274A}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
