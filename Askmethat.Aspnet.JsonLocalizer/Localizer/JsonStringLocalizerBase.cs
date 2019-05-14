@@ -111,11 +111,12 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
             {
                 Localization = new Dictionary<string, LocalizatedFormat>();
             }
-
-            string pattern = string.IsNullOrWhiteSpace(BaseName) ? "*.json" : $"{BaseName}/*.json";
+            var basePath = string.IsNullOrWhiteSpace(BaseName) ? jsonPath : Path.Combine(jsonPath, BaseName);
+            if (!Directory.Exists(basePath)) return;
+            string pattern = "*.json";
 
             //get all files ending by json extension
-            string[] myFiles = Directory.GetFiles(jsonPath, pattern, SearchOption.AllDirectories);
+            string[] myFiles = Directory.GetFiles(basePath, pattern, SearchOption.AllDirectories);
 
             foreach (string file in myFiles)
             {
