@@ -56,8 +56,6 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            //app.
             app.UseRequestLocalization();
             app.UseMvc(routes =>
             {
