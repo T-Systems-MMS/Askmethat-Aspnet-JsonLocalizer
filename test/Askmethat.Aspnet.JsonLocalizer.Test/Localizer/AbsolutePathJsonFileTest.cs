@@ -11,7 +11,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Test.Localizer
     [TestClass]
     public class AbsolutePathJsonFileTest
     {
-        JsonStringLocalizer localizer = null;
+        private JsonStringLocalizer localizer = null;
         public void InitLocalizer(CultureInfo cultureInfo)
         {
             CultureInfo.CurrentUICulture = cultureInfo;
