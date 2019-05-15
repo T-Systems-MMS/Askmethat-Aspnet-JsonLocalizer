@@ -41,10 +41,10 @@ services.AddJsonLocalization(options => {
 
 - **SupportedCultureInfos** : _Default value : _List containing only default culture_ and CurrentUICulture. Optional array of cultures that you should provide to plugin. _(Like RequestLocalizationOptions)
 - **ResourcesPath** : _Default value : `$"{_env.WebRootPath}/Resources/"`_.  Base path of your resources. The plugin will browse the folder and sub-folders and load all present JSON files matching the settings, depending on the "UseBaseName"-property
-- **CacheDuration** : _Default value : 30 minutes_. Cache all values to memory to avoid loading files for each request,
+- **CacheDuration** : _Default value : 30 minutes_. We cache all values to memory to avoid loading files for each request, this parameter defines the time after which the cache is refreshed.
 - **FileEncoding** : _default value : UTF8_. Specify the file encoding.
 - **IsAbsolutePath** : *_default value : false*. Look for an absolute path instead of project path.
-- **UseBaseName** : *_default value : false*. Use base name location for Views and consors like default Resx localization in **ResourcePathFolder**. Please have a look at the documentation below to see the different possiblities for structuring your translation files.
+- **UseBaseName** : *_default value : false*. Use base name location for Views and constructors like default Resx localization in **ResourcePathFolder**. Please have a look at the documentation below to see the different possiblities for structuring your translation files.
 - **Caching** : *_default value: MemoryCache*. Internal caching can be overwritted by using custom class that extends IMemoryCache.
 - **PluralSeparator** : *_default value: |*. Seperator used to get singular or pluralized version of localization. More information in *Pluralization*
 
