@@ -49,15 +49,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         {
             if (!MemCache.TryGetValue(GetCacheKey(cultureToUse), out Localization))
             {
-                if (MemCache.TryGetValue(GetCacheKey(cultureToUse.Parent), out Localization))
-                {
-                    SetCurrentCultureToCache(cultureToUse.Parent);
-                }
-                else
-                {
-                    MemCache.TryGetValue(GetCacheKey(cultureToUse), out Localization);
-                    SetCurrentCultureToCache(LocalizationOptions.Value.DefaultCulture);
-                }
+                MemCache.TryGetValue(GetCacheKey(cultureToUse.Parent), out Localization);
             }
             SetCurrentCultureToCache(cultureToUse);
         }
