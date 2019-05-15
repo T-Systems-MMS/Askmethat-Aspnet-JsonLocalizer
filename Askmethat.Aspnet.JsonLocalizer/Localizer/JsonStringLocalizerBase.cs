@@ -47,183 +47,196 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
 
         protected void GetCultureToUse(CultureInfo cultureToUse)
         {
-            if (!MemCache.TryGetValue(GetCacheKey(cultureToUse), out Localization))
+            // https://github.com/AlexTeixeira/Askmethat-Aspnet-JsonLocalizer/issues/52#issuecomment-492104806
+            if (MemCache.TryGetValue(GetCacheKey(cultureToUse), out Localization))
             {
-                MemCache.TryGetValue(GetCacheKey(cultureToUse.Parent), out Localization);
-            }
-            SetCurrentCultureToCache(cultureToUse);
-        }
-
-        protected void InitJsonStringLocalizer()
-        {
-            AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
-            AddMissingCultureToSupportedCulture(LocalizationOptions.Value.DefaultCulture);
-
-            foreach (CultureInfo ci in LocalizationOptions.Value.SupportedCultureInfos)
-            {
-                InitJsonStringLocalizer(ci);
+                SetCurrentCultureToCache(cultureToUse);
+                return;
             }
 
-            //after initialization, get current ui culture
-            GetCultureToUse(CultureInfo.CurrentUICulture);
-        }
-
-        protected void AddMissingCultureToSupportedCulture(CultureInfo cultureInfo)
-        {
-            if (!LocalizationOptions.Value.SupportedCultureInfos.Contains(cultureInfo))
+            if (MemCache.TryGetValue(GetCacheKey(cultureToUse.Parent), out Localization))
             {
-                LocalizationOptions.Value.SupportedCultureInfos.Add(cultureInfo);
+                SetCurrentCultureToCache(cultureToUse.Parent);
+                return;
+            }
+
+            if (MemCache.TryGetValue(GetCacheKey(LocalizationOptions.Value.DefaultCulture), out Localization))
+            {
+                SetCurrentCultureToCache(LocalizationOptions.Value.DefaultCulture);
             }
         }
 
-        protected void InitJsonStringLocalizer(CultureInfo currentCulture)
-        {
-            //Look for cache key.
-            if (!MemCache.TryGetValue(GetCacheKey(currentCulture), out Localization))
-            {
-                ConstructLocalizationObject(ResourcesRelativePath, currentCulture);
-                // Set cache options.
-                MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
-                    // Keep in cache for this time, reset time if accessed.
-                    .SetSlidingExpiration(MemCacheDuration);
+    protected void InitJsonStringLocalizer()
+    {
+        AddMissingCultureToSupportedCulture(CultureInfo.CurrentUICulture);
+        AddMissingCultureToSupportedCulture(LocalizationOptions.Value.DefaultCulture);
 
-                // Save data in cache.
-                MemCache.Set(GetCacheKey(currentCulture), Localization, cacheEntryOptions);
-            }
+        foreach (CultureInfo ci in LocalizationOptions.Value.SupportedCultureInfos)
+        {
+            InitJsonStringLocalizer(ci);
         }
 
-        /// <summary>
-        /// Construct localization object from json files
-        /// </summary>
-        /// <param name="jsonPath">Json file path</param>
-        private void ConstructLocalizationObject(string jsonPath, CultureInfo currentCulture)
+        //after initialization, get current ui culture
+        GetCultureToUse(CultureInfo.CurrentUICulture);
+    }
+
+    protected void AddMissingCultureToSupportedCulture(CultureInfo cultureInfo)
+    {
+        if (!LocalizationOptions.Value.SupportedCultureInfos.Contains(cultureInfo))
         {
-            //be sure that localization is always initialized
-            if (Localization == null)
-            {
-                Localization = new Dictionary<string, LocalizatedFormat>();
-            }
+            LocalizationOptions.Value.SupportedCultureInfos.Add(cultureInfo);
+        }
+    }
 
-            var myFiles = GetMatchingJsonFiles(jsonPath);
+    protected void InitJsonStringLocalizer(CultureInfo currentCulture)
+    {
+        //Look for cache key.
+        if (!MemCache.TryGetValue(GetCacheKey(currentCulture), out Localization))
+        {
+            ConstructLocalizationObject(ResourcesRelativePath, currentCulture);
+            // Set cache options.
+            MemoryCacheEntryOptions cacheEntryOptions = new MemoryCacheEntryOptions()
+                // Keep in cache for this time, reset time if accessed.
+                .SetSlidingExpiration(MemCacheDuration);
 
-            foreach (string file in myFiles)
+            // Save data in cache.
+            MemCache.Set(GetCacheKey(currentCulture), Localization, cacheEntryOptions);
+        }
+    }
+
+    /// <summary>
+    /// Construct localization object from json files
+    /// </summary>
+    /// <param name="jsonPath">Json file path</param>
+    private void ConstructLocalizationObject(string jsonPath, CultureInfo currentCulture)
+    {
+        //be sure that localization is always initialized
+        if (Localization == null)
+        {
+            Localization = new Dictionary<string, LocalizatedFormat>();
+        }
+
+        var myFiles = GetMatchingJsonFiles(jsonPath);
+
+        foreach (string file in myFiles)
+        {
+            Dictionary<string, JsonLocalizationFormat> tempLocalization = JsonConvert.DeserializeObject<Dictionary<string, JsonLocalizationFormat>>(File.ReadAllText(file, LocalizationOptions.Value.FileEncoding));
+            foreach (KeyValuePair<string, JsonLocalizationFormat> temp in tempLocalization)
             {
-                Dictionary<string, JsonLocalizationFormat> tempLocalization = JsonConvert.DeserializeObject<Dictionary<string, JsonLocalizationFormat>>(File.ReadAllText(file, LocalizationOptions.Value.FileEncoding));
-                foreach (KeyValuePair<string, JsonLocalizationFormat> temp in tempLocalization)
+                LocalizatedFormat localizedValue = GetLocalizedValue(currentCulture, temp);
+                if (!(localizedValue.Value is null))
                 {
-                    LocalizatedFormat localizedValue = GetLocalizedValue(currentCulture, temp);
-                    if (!(localizedValue.Value is null))
+                    if (!Localization.ContainsKey(temp.Key))
                     {
-                        if (!Localization.ContainsKey(temp.Key))
-                        {
-                            Localization.Add(temp.Key, localizedValue);
-                        }
-                        else if (Localization[temp.Key].IsParent)
-                        {
-                            Localization[temp.Key] = localizedValue;
-                        }
+                        Localization.Add(temp.Key, localizedValue);
+                    }
+                    else if (Localization[temp.Key].IsParent)
+                    {
+                        Localization[temp.Key] = localizedValue;
                     }
                 }
             }
         }
+    }
 
-        private IEnumerable<string> GetMatchingJsonFiles(string jsonPath)
+    private IEnumerable<string> GetMatchingJsonFiles(string jsonPath)
+    {
+        var searchPattern = "*.json";
+        var searchOption = SearchOption.AllDirectories;
+        var basePath = jsonPath;
+        if (LocalizationOptions.Value.UseBaseName && !string.IsNullOrWhiteSpace(BaseName))
         {
-            var searchPattern = "*.json";
-            var searchOption = SearchOption.AllDirectories;
-            var basePath = jsonPath;
-            if (LocalizationOptions.Value.UseBaseName && !string.IsNullOrWhiteSpace(BaseName))
+            /*
+             https://docs.microsoft.com/de-de/aspnet/core/fundamentals/localization?view=aspnetcore-2.2#dataannotations-localization
+                Using the option ResourcesPath = "Resources", the error messages in RegisterViewModel can be stored in either of the following paths:
+                Resources/ViewModels.Account.RegisterViewModel.fr.resx
+                Resources/ViewModels/Account/RegisterViewModel.fr.resx
+             */
+
+            searchOption = SearchOption.TopDirectoryOnly;
+            var friendlyName = AppDomain.CurrentDomain.FriendlyName;
+
+            var shortName = BaseName.Replace($"{friendlyName}.", "");
+
+            basePath = Path.Combine(jsonPath, TransformNameToPath(shortName));
+            if (Directory.Exists(basePath))
             {
-                /*
-                 https://docs.microsoft.com/de-de/aspnet/core/fundamentals/localization?view=aspnetcore-2.2#dataannotations-localization
-                    Using the option ResourcesPath = "Resources", the error messages in RegisterViewModel can be stored in either of the following paths:
-                    Resources/ViewModels.Account.RegisterViewModel.fr.resx
-                    Resources/ViewModels/Account/RegisterViewModel.fr.resx
-                 */
+                // We can search something like Resources/ViewModels/Account/RegisterViewModel/*.json
+                searchPattern = "*.json";
+            }
+            else
+            {  // We search something like Resources/ViewModels/Account/RegisterViewModel.json
+                var lastDot = shortName.LastIndexOf('.');
+                var className = shortName.Substring(lastDot + 1);
+                // Remove class name from shortName so we can use it as folder.
+                var baseFolder = shortName.Substring(0, lastDot);
+                baseFolder = TransformNameToPath(baseFolder);
 
-                searchOption = SearchOption.TopDirectoryOnly;
-                var friendlyName = AppDomain.CurrentDomain.FriendlyName;
+                basePath = Path.Combine(jsonPath, baseFolder);
 
-                var shortName = BaseName.Replace($"{friendlyName}.", "");
-
-                basePath = Path.Combine(jsonPath, TransformNameToPath(shortName));
                 if (Directory.Exists(basePath))
                 {
-                    // We can search something like Resources/ViewModels/Account/RegisterViewModel/*.json
-                    searchPattern = "*.json";
+                    searchPattern = $"{className}?.json";
                 }
                 else
-                {  // We search something like Resources/ViewModels/Account/RegisterViewModel.json
-                    var lastDot = shortName.LastIndexOf('.');
-                    var className = shortName.Substring(lastDot + 1);
-                    // Remove class name from shortName so we can use it as folder.
-                    var baseFolder = shortName.Substring(0, lastDot);
-                    baseFolder = TransformNameToPath(baseFolder);
-
-                    basePath = Path.Combine(jsonPath, baseFolder);
-
-                    if (Directory.Exists(basePath))
-                    {
-                        searchPattern = $"{className}?.json";
-                    }
-                    else
-                    { // We search something like Resources/ViewModels.Account.RegisterViewModel.json
-                        basePath = jsonPath;
-                        searchPattern = $"{shortName}?.json";
-                    }
+                { // We search something like Resources/ViewModels.Account.RegisterViewModel.json
+                    basePath = jsonPath;
+                    searchPattern = $"{shortName}?.json";
                 }
             }
-
-            // Get all files ending by json extension
-            return Directory.GetFiles(basePath, searchPattern, searchOption);
         }
 
-        private string TransformNameToPath(string name)
+        // Get all files ending by json extension
+        return Directory.GetFiles(basePath, searchPattern, searchOption);
+    }
+
+    private string TransformNameToPath(string name)
+    {
+        if (!string.IsNullOrEmpty(name))
         {
-            if (!string.IsNullOrEmpty(name))
-            {
-                return name.Replace(".", Path.DirectorySeparatorChar.ToString());
-            }
-            return null;
+            return name.Replace(".", Path.DirectorySeparatorChar.ToString());
+        }
+        return null;
+    }
+
+    private string CleanBaseName(string baseName)
+    {
+        if (string.IsNullOrWhiteSpace(baseName)) return baseName;
+        var plusIdx = baseName.IndexOf('+');
+        if (plusIdx == -1)
+        {
+            return baseName;
         }
 
-        private string CleanBaseName(string baseName)
-        {
-            var plusIdx = baseName.IndexOf('+');
-            if (plusIdx == -1)
-            {
-                return baseName;
-            }
+        // Nested classes are seperated by + and should use the translation of their parent class.
+        return baseName.Substring(0, plusIdx);
+    }
 
-            // Nested classes are seperated by + and should use the translation of their parent class.
-            return baseName.Substring(0, plusIdx);
-        }
-
-        private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
+    private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
+    {
+        bool isParent = false;
+        string value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
+        if (value is null)
         {
-            bool isParent = false;
-            string value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
+            isParent = true;
+            value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Parent.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
             if (value is null)
             {
-                isParent = true;
-                value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, currentCulture.Parent.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
-                if (value is null)
+                value = temp.Value.Values.FirstOrDefault(s => string.IsNullOrWhiteSpace(s.Key)).Value;
+                if (value is null && LocalizationOptions.Value.DefaultCulture != null)
                 {
-                    value = temp.Value.Values.FirstOrDefault(s => string.IsNullOrWhiteSpace(s.Key)).Value;
-                    if (value is null && LocalizationOptions.Value.DefaultCulture != null)
-                    {
-                        value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, LocalizationOptions.Value.DefaultCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
-                    }
+                    value = temp.Value.Values.FirstOrDefault(s => string.Equals(s.Key, LocalizationOptions.Value.DefaultCulture.Name, StringComparison.InvariantCultureIgnoreCase)).Value;
                 }
             }
-            return new LocalizatedFormat()
-            {
-                IsParent = isParent,
-                Value = value
-            };
         }
-
-
-
+        return new LocalizatedFormat()
+        {
+            IsParent = isParent,
+            Value = value
+        };
     }
+
+
+
+}
 }
