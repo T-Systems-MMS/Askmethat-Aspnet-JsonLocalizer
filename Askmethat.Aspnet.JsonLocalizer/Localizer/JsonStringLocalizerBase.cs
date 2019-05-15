@@ -203,6 +203,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 return baseName;
             }
 
+            // Nested classes are seperated by + and should use the translation of their parent class.
             return baseName.Substring(0, plusIdx);
         }
 
