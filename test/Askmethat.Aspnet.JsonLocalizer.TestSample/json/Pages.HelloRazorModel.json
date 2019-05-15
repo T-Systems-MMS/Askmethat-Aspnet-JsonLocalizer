@@ -4,5 +4,11 @@
       "en-US": "Hello from Razor page model",
       "fr-FR": "Bonjour de rasoir page model ;)"
     }
+  },
+  "InputField": {
+    "Values": {
+      "en-US": "Write some text.",
+      "fr-FR": "Écri un petite texte."
+    }
   }
 }

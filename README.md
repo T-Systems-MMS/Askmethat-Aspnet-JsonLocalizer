@@ -55,6 +55,7 @@ If UseBaseName is set to true, it will be searched for lingualization files by t
 - If you use a non-typed IStringLocalizer all files in the Resources-directory, including all subdirectories, will be used to find a localization. This can cause unpredictable behavior if the same key is used in multiple files.
 
 - If you use a typed localizer, the following applies - Namespace is the "short namespace" without the root namespace:
+  - Nested classes will use the translation file of their parent class.
   - If there is a folder named "Your/Namespace/And/Classname", all contents of this folder will be used.
   - If there is a folder named "Your/Namespace" the folder will be searched for all json-files beginning with your classname.
   - Otherwise there will be searched for a json-file starting with "Your.Namespace.And.Classname" in your Resources-folder.

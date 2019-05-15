@@ -20,9 +20,6 @@
     <Content Update="json\Controllers\HomeController\translation2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Update="json\Pages.HelloRazorModel.InputModel.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Update="json\Pages.HelloRazor.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

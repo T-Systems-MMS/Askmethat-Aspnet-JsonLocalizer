@@ -24,8 +24,7 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
         protected string CurrentCulture = string.Empty;
         public JsonStringLocalizerBase(IOptions<JsonLocalizationOptions> localizationOptions, string baseName = null)
         {
-            // As nested classes are represented by "+" instead of "." we replace those.
-            BaseName = baseName?.Replace("+",".");
+            BaseName = CleanBaseName(baseName);
             LocalizationOptions = localizationOptions;
             MemCache = LocalizationOptions.Value.Caching;
             MemCacheDuration = LocalizationOptions.Value.CacheDuration;
@@ -194,6 +193,17 @@ namespace Askmethat.Aspnet.JsonLocalizer.Localizer
                 return name.Replace(".", Path.DirectorySeparatorChar.ToString());
             }
             return null;
+        }
+
+        private string CleanBaseName(string baseName)
+        {
+            var plusIdx = baseName.IndexOf('+');
+            if (plusIdx == -1)
+            {
+                return baseName;
+            }
+
+            return baseName.Substring(0, plusIdx);
         }
 
         private LocalizatedFormat GetLocalizedValue(CultureInfo currentCulture, KeyValuePair<string, JsonLocalizationFormat> temp)
