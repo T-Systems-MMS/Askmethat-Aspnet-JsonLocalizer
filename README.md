@@ -2,7 +2,8 @@
 Json Localizer library for .NetStandard and .NetCore Asp.net projects
 
 #### Nuget
-[NuGet](https://dev.azure.com/T-Systems-MMS/Askmethat-Aspnet-JsonLocalizer/_packaging?_a=package&feed=T-Systems-MMS&package=Askmethat.Aspnet.JsonLocalizer&protocolType=NuGet)
+
+[![Askmethat.Aspnet.JsonLocalizer package in T-Systems-MMS feed in Azure Artifacts](https://feeds.dev.azure.com/T-Systems-MMS/_apis/public/Packaging/Feeds/8ed18c8e-4f19-4994-be32-0a1f0893af0f/Packages/a2efa605-6110-4bdd-902e-fe9282ad2899/Badge)](https://dev.azure.com/T-Systems-MMS/Askmethat-Aspnet-JsonLocalizer/_packaging?_a=package&feed=8ed18c8e-4f19-4994-be32-0a1f0893af0f&package=a2efa605-6110-4bdd-902e-fe9282ad2899&preferRelease=true)
 
 #### Build
 
