@@ -28,6 +28,10 @@ namespace Askmethat.Aspnet.JsonLocalizer.TestSample.Pages
         {
             [Display(Name = "InputField")]
             public string InputField { get; set; }
+
+            [EmailAddress]
+            [Required(ErrorMessage = "Hi")]
+            public string Email { get; set; }
         }
 
         public void OnGet()

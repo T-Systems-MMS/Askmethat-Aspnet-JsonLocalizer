@@ -10,5 +10,17 @@
       "en-US": "Write some text.",
       "fr-FR": "Écri un petite texte."
     }
+  },
+  "Validation_EmailAddress": {
+    "Values": {
+      "en-US": "Please provide a valid mail address for {0}.",
+      "fr-FR": "Fournir on mail address valide s'il vous plaît pour {0}."
+    }
+  },
+  "Validation_Required": {
+    "Values": {
+      "en-US": "The {0} field is required. Please provide a value.",
+      "fr-FR": "Le {0} champ est falloir."
+    }
   }
 }
