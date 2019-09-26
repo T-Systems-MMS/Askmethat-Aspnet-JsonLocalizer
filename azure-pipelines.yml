@@ -8,43 +8,91 @@ trigger:
  - feature/*
  - fix/*
 
-pool:
-  vmImage: 'ubuntu-latest'
-
 variables:
   buildConfiguration: 'Release'
   PrePackageSuffix: 'pre'
-  ArtifactName: 'Askmethat.AspNet.JsonLocalizer'
+  NugetArtifactName: 'NugetPackages'
+  TargetFeed: '8ed18c8e-4f19-4994-be32-0a1f0893af0f'
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        feedsToUse: 'select'
+        vstsFeed: '$(TargetFeed)'
+    - script: dotnet build --configuration $(buildConfiguration) --no-restore
+      displayName: 'dotnet build $(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Run tests'
+      inputs:
+        command: 'test'
+        projects: 'test/**/*.csproj'
+        feedsToUse: 'select'
+        versioningScheme: 'off'
+    - task: DotNetCoreCLI@2
+      condition: succeeded()
+      displayName: 'Pack pre-package'
+      inputs:
+        command: custom
+        projects: '**/*.csproj'
+        custom: 'pack'
+        arguments: '--configuration $(buildConfiguration) --output $(build.artifactStagingDirectory)/pre --version-suffix "$(PrePackageSuffix)-$(Build.BuildNumber)"'
+    - task: DotNetCoreCLI@2
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      displayName: 'Pack prod package'
+      inputs:
+        command: 'custom'
+        custom: 'pack'
+        packagesToPack: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration) --output $(build.artifactStagingDirectory)/prod'
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish artifacts'
+      inputs:
+        targetPath: '$(build.artifactStagingDirectory)'
+        artifact: '$(NugetPackages)'
 
-steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
-- task: DotNetCoreCLI@2
-  displayName: 'Run tests'
-  inputs:
-    command: 'test'
-    projects: 'test/**/*.csproj'
-    feedsToUse: 'select'
-    versioningScheme: 'off'
-- task: DotNetCoreCLI@2
+- stage: Prerelease
   condition: succeeded()
-  displayName: 'Pack pre-package'
-  inputs:
-    command: custom
-    projects: '**/*.csproj'
-    custom: 'pack'
-    arguments: '--configuration $(buildConfiguration) --output $(build.artifactStagingDirectory)/pre --version-suffix "$(PrePackageSuffix)-$(Build.BuildNumber)"'
-- task: DotNetCoreCLI@2
+  jobs:
+    # track deployments on the environment
+  - deployment: NugetPush
+    pool:
+      vmImage: 'ubuntu-latest'
+    # creates an environment if it doesn’t exist
+    environment: 'Prerelease'
+    strategy:
+      # default deployment strategy
+      runOnce:
+        deploy:
+          steps:
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'push'
+              packagesToPush: '$(Pipeline.Workspace)/$(NugetPackages)/pre/*.nupkg'
+              nuGetFeedType: 'internal'
+              publishVstsFeed: '$(TargetFeed)'
+- stage: Release
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  displayName: 'Pack prod package'
-  inputs:
-    command: 'custom'
-    custom: 'pack'
-    packagesToPack: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(build.artifactStagingDirectory)/prod'
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish build artifacts'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: '$(ArtifactName)'
-    publishLocation: 'Container'
+  jobs:
+    # track deployments on the environment
+  - deployment: NugetPush
+    pool:
+      vmImage: 'ubuntu-latest'
+    # creates an environment if it doesn’t exist
+    environment: 'Release'
+    strategy:
+      # default deployment strategy
+      runOnce:
+        deploy:
+          steps:
+          - task: DotNetCoreCLI@2
+            inputs:
+              command: 'push'
+              packagesToPush: '$(Pipeline.Workspace)/$(NugetPackages)/prod/*.nupkg'
+              nuGetFeedType: 'internal'
+              publishVstsFeed: '$(TargetFeed)'
